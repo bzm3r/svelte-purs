@@ -1,5 +1,5 @@
 export const throwError = (msg: string) => {
-  throw new Error(`[svelte-preprocess] ${msg}`);
+  throw new Error(`[svelte-purs] ${msg}`);
 };
 
 export const throwTypescriptError = () => {

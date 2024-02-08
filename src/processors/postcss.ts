@@ -1,15 +1,15 @@
-import { getTagInfo } from '../modules/tagInfo';
-import { concat } from '../modules/utils';
-import { prepareContent } from '../modules/prepareContent';
+import { getTagInfo } from "../modules/tagInfo";
+import { concat } from "../modules/utils";
+import { prepareContent } from "../modules/prepareContent";
 
-import type { PreprocessorGroup, Options } from '../types';
+import type { PreprocessorGroup, Options } from "../types";
 
-/** Adapted from https://github.com/TehShrike/svelte-preprocess-postcss */
+/** Adapted from https://github.com/TehShrike/svelte-purs-postcss */
 export default (options?: Options.Postcss): PreprocessorGroup => ({
   async style(svelteFile) {
-    const { transformer } = await import('../transformers/postcss');
+    const { transformer } = await import("../transformers/postcss");
     let { content, filename, attributes, dependencies } = await getTagInfo(
-      svelteFile,
+      svelteFile
     );
 
     content = prepareContent({ options, content });

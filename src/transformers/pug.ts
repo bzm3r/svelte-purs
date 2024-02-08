@@ -1,10 +1,10 @@
-import detectIndent from 'detect-indent';
-import pug from 'pug';
+import detectIndent from "detect-indent";
+import pug from "pug";
 
-import type { Transformer, Options } from '../types';
+import type { Transformer, Options } from "../types";
 
 // Mixins to use svelte template features
-const GET_MIXINS = (indentationType: 'tab' | 'space') =>
+const GET_MIXINS = (indentationType: "tab" | "space") =>
   `mixin if(condition)
 %_| {#if !{condition}}
 %_block
@@ -50,7 +50,7 @@ mixin const(expression)
 mixin debug(variables)
 %_| {@debug !{variables}}`.replace(
     /%_/g,
-    indentationType === 'tab' ? '\t' : '  ',
+    indentationType === "tab" ? "\t" : "  "
   );
 
 const transformer: Transformer<Options.Pug> = async ({
@@ -61,17 +61,17 @@ const transformer: Transformer<Options.Pug> = async ({
   const pugOptions = {
     // needed so pug doesn't mirror boolean attributes
     // and prop spreading expressions.
-    doctype: 'html',
+    doctype: "html",
     compileDebug: false,
     filename,
     ...options,
   };
 
   const { type: indentationType } = detectIndent(content);
-  const input = `${GET_MIXINS(indentationType ?? 'space')}\n${content}`;
+  const input = `${GET_MIXINS(indentationType ?? "space")}\n${content}`;
   const compiled = pug.compile(
     input,
-    pugOptions,
+    pugOptions
     // @types/pug compile() returned value doesn't have `dependencies` prop
   ) as pug.compileTemplate & { dependencies?: string[] };
 
@@ -82,7 +82,7 @@ const transformer: Transformer<Options.Pug> = async ({
   } catch (e) {
     // The error message does not have much context, add more of it
     if (e instanceof Error) {
-      e.message = `[svelte-preprocess] Pug error while preprocessing ${filename}\n\n${e.message}`;
+      e.message = `[svelte-purs] Pug error while preprocessing ${filename}\n\n${e.message}`;
     }
 
     throw e;

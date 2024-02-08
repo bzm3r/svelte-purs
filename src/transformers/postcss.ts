@@ -1,6 +1,6 @@
-import postcss from 'postcss';
+import postcss from "postcss";
 
-import type { Transformer, Options } from '../types';
+import type { Transformer, Options } from "../types";
 
 async function process({
   options: { plugins = [], parser, syntax } = {},
@@ -23,7 +23,7 @@ async function process({
 
   const dependencies = messages.reduce((acc, msg) => {
     // istanbul ignore if
-    if (msg.type !== 'dependency') return acc;
+    if (msg.type !== "dependency") return acc;
     acc.push(msg.file);
 
     return acc;
@@ -33,14 +33,14 @@ async function process({
 }
 
 async function getConfigFromFile(
-  options: Options.Postcss,
+  options: Options.Postcss
 ): Promise<{ config: Options.Postcss | null; error?: string | null }> {
   try {
     /** If not, look for a postcss config file */
     const { default: postcssLoadConfig } = await import(`postcss-load-config`);
     const loadedConfig = await postcssLoadConfig(
       options,
-      options?.configFilePath,
+      options?.configFilePath
     );
 
     return {
@@ -59,7 +59,7 @@ async function getConfigFromFile(
   }
 }
 
-/** Adapted from https://github.com/TehShrike/svelte-preprocess-postcss */
+/** Adapted from https://github.com/TehShrike/svelte-purs-postcss */
 const transformer: Transformer<Options.Postcss> = async ({
   content,
   filename,
@@ -82,7 +82,7 @@ const transformer: Transformer<Options.Postcss> = async ({
 
   if (fileConfig?.error != null) {
     console.error(
-      `[svelte-preprocess] PostCSS configuration was not passed or is invalid. If you expect to load it from a file make sure to install "postcss-load-config" and try again.\n\n${fileConfig.error}`,
+      `[svelte-purs] PostCSS configuration was not passed or is invalid. If you expect to load it from a file make sure to install "postcss-load-config" and try again.\n\n${fileConfig.error}`
     );
   }
 

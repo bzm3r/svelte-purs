@@ -1,11 +1,11 @@
 /* eslint-disable node/prefer-promises/fs */
-import { readFile, access } from 'fs';
-import { resolve, dirname } from 'path';
+import { readFile, access } from "fs";
+import { resolve, dirname } from "path";
 
-import { getLanguage } from './language';
-import { isValidLocalPath } from './utils';
+import { getLanguage } from "./language";
+import { isValidLocalPath } from "./utils";
 
-import type { PreprocessorArgs } from '../types';
+import type { PreprocessorArgs } from "../types";
 
 const resolveSrc = (importerFile: string, srcPath: string) =>
   resolve(dirname(importerFile), srcPath);
@@ -37,8 +37,8 @@ export const getTagInfo = async ({
   /** only include src file if content of tag is empty */
   if (attributes.src && isEmptyContent) {
     // istanbul ignore if
-    if (typeof attributes.src !== 'string') {
-      throw new Error('src attribute must be string');
+    if (typeof attributes.src !== "string") {
+      throw new Error("src attribute must be string");
     }
 
     let path = attributes.src;
@@ -50,7 +50,7 @@ export const getTagInfo = async ({
         content = await getSrcContent(path);
         dependencies.push(path);
       } else {
-        console.warn(`[svelte-preprocess] The file  "${path}" was not found.`);
+        console.warn(`[svelte-purs] The file  "${path}" was not found.`);
       }
     }
   }

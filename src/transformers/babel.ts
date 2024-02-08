@@ -1,7 +1,7 @@
-import { transformAsync } from '@babel/core';
+import { transformAsync } from "@babel/core";
 
-import type { TransformOptions } from '@babel/core';
-import type { Transformer, Options } from '../types';
+import type { TransformOptions } from "@babel/core";
+import type { Transformer, Options } from "../types";
 
 const transformer: Transformer<Options.Babel> = async ({
   content,
@@ -12,8 +12,8 @@ const transformer: Transformer<Options.Babel> = async ({
   const babelOptions = {
     ...options,
     inputSourceMap:
-      typeof map === 'string' ? JSON.parse(map) : map ?? undefined,
-    sourceType: 'module',
+      typeof map === "string" ? JSON.parse(map) : map ?? undefined,
+    sourceType: "module",
     // istanbul ignore next
     sourceMaps: !!options?.sourceMaps,
     filename,
@@ -21,7 +21,7 @@ const transformer: Transformer<Options.Babel> = async ({
     ast: false,
     code: true,
     caller: {
-      name: 'svelte-preprocess',
+      name: "svelte-purs",
       supportsStaticESM: true,
       supportsDynamicImport: true,
       // this isn't supported by Svelte but let it error with a good error on this syntax untouched

@@ -14,24 +14,32 @@
 
 ## With Svelte Config
 
-Some tools of the Svelte ecosystem, such as [svelte-vscode](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode) and [svelte-kit](https://github.com/sveltejs/kit), need access to your svelte configuration so they know how to properly handle your Svelte files. This can be achieved by creating a `svelte.config.js` file at the root of your project which exports a svelte options object (similar to `svelte-loader` and `rollup-plugin-svelte`).
+Some tools of the Svelte ecosystem, such as
+[svelte-vscode](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode)
+and [svelte-kit](https://github.com/sveltejs/kit), need access to your
+svelte configuration so they know how to properly handle your Svelte
+files. This can be achieved by creating a `svelte.config.js` file at the
+root of your project which exports a svelte options object (similar to
+`svelte-loader` and `rollup-plugin-svelte`).
 
 **Example**:
 
-Write the config in ESM style when you have `"type": "module"` in your `package.json`. This is the case for Vite starters and SvelteKit projects.
+Write the config in ESM style when you have `"type": "module"` in your
+`package.json`. This is the case for Vite starters and SvelteKit
+projects.
 
-```js
+``` js
 // svelte.config.js
-import preprocess from 'svelte-preprocess';
+import preprocess from 'svelte-purs';
 
-/** 
+/**
  * This will add autocompletion if you're working with SvelteKit
- * 
- * @type {import('@sveltejs/kit').Config} 
+ *
+ * @type {import('@sveltejs/kit').Config}
  */
 const config = {
   preprocess: preprocess({
-    // ...svelte-preprocess options
+    // ...svelte-purs options
   }),
   // ...other svelte options
 };
@@ -39,29 +47,31 @@ const config = {
 export default config;
 ```
 
-Write the config in CommonJS style when you don't have `"type": "module"` in your `package.json`. This is the case for the Svelte starter template.
+Write the config in CommonJS style when you don't have
+`"type": "module"` in your `package.json`. This is the case for the
+Svelte starter template.
 
-```js
+``` js
 // svelte.config.js
-const sveltePreprocess = require('svelte-preprocess');
+const sveltePreprocess = require('svelte-purs');
 module.exports = {
   preprocess: sveltePreprocess({
-    // ...svelte-preprocess options
+    // ...svelte-purs options
   }),
   // ...other svelte options
 };
 ```
 
-
-_Tip: this file can be imported in your bundle config instead of having multiple svelte configurations lying around._
+*Tip: this file can be imported in your bundle config instead of having
+multiple svelte configurations lying around.*
 
 ## With `rollup-plugin-svelte`
 
-```js
+``` js
 // rollup.config.js
 import svelte from 'rollup-plugin-svelte';
-import sveltePreprocess from 'svelte-preprocess'
-import { scss, coffeescript, pug } from 'svelte-preprocess'
+import sveltePreprocess from 'svelte-purs'
+import { scss, coffeescript, pug } from 'svelte-purs'
 
 export default {
   ...,
@@ -88,7 +98,7 @@ export default {
 
 ## With `svelte-loader`
 
-```js
+``` js
   ...
   module: {
     rules: [
@@ -99,7 +109,7 @@ export default {
         use: {
           loader: 'svelte-loader',
           options: {
-            preprocess: require('svelte-preprocess')({
+            preprocess: require('svelte-purs')({
               /* options */
           })
           },
@@ -113,11 +123,13 @@ export default {
 
 ## With Sapper
 
-[Sapper](https://sapper.svelte.dev/) has two build configurations, one for the client bundle and one for the server. To use `svelte-preprocess` with Sapper, you need to define it on both configurations.
+[Sapper](https://sapper.svelte.dev/) has two build configurations, one
+for the client bundle and one for the server. To use `svelte-purs` with
+Sapper, you need to define it on both configurations.
 
-```js
+``` js
 // ...
-import sveltePreprocess from 'svelte-preprocess';
+import sveltePreprocess from 'svelte-purs';
 
 const preprocess = sveltePreprocess({
   postcss: true,

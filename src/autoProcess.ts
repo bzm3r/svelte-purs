@@ -1,5 +1,5 @@
-import { hasDepInstalled, concat, setProp } from './modules/utils';
-import { getTagInfo } from './modules/tagInfo';
+import { hasDepInstalled, concat, setProp } from "./modules/utils";
+import { getTagInfo } from "./modules/tagInfo";
 import {
   addLanguageAlias,
   getLanguageFromAlias,
@@ -7,9 +7,9 @@ import {
   getLanguage,
   getLanguageDefaults,
   isAliasOf,
-} from './modules/language';
-import { prepareContent } from './modules/prepareContent';
-import { transformMarkup } from './modules/markup';
+} from "./modules/language";
+import { prepareContent } from "./modules/prepareContent";
+import { transformMarkup } from "./modules/markup";
 
 import type {
   AutoPreprocessGroup,
@@ -20,24 +20,24 @@ import type {
   TransformerArgs,
   TransformerOptions,
   Transformers,
-} from './types';
+} from "./types";
 
 const TARGET_LANGUAGES = Object.freeze({
-  markup: 'html',
-  style: 'css',
-  script: 'javascript',
+  markup: "html",
+  style: "css",
+  script: "javascript",
 });
 
 export const transform = async (
   name: string | null | undefined,
   options: TransformerOptions,
-  { content, markup, map, filename, attributes }: TransformerArgs<any>,
+  { content, markup, map, filename, attributes }: TransformerArgs<any>
 ): Promise<Processed> => {
   if (name == null || options === false) {
     return { code: content };
   }
 
-  if (typeof options === 'function') {
+  if (typeof options === "function") {
     return options({ content, map, filename, attributes });
   }
 
@@ -50,18 +50,18 @@ export const transform = async (
     filename,
     map,
     attributes,
-    options: typeof options === 'boolean' ? null : options,
+    options: typeof options === "boolean" ? null : options,
   });
 };
 
 export function sveltePreprocess(
   {
     aliases,
-    markupTagName = 'template',
+    markupTagName = "template",
     preserve = [],
-    sourceMap = process?.env?.NODE_ENV === 'development' ?? false,
+    sourceMap = process?.env?.NODE_ENV === "development" ?? false,
     ...rest
-  } = {} as AutoPreprocessOptions,
+  } = {} as AutoPreprocessOptions
 ): AutoPreprocessGroup {
   const transformers = rest as Transformers;
 
@@ -75,13 +75,13 @@ export function sveltePreprocess(
 
     const opts: Record<string, any> = {};
 
-    if (typeof langOpts === 'object') {
+    if (typeof langOpts === "object") {
       Object.assign(opts, langOpts);
     }
 
     Object.assign(opts, getLanguageDefaults(lang), getLanguageDefaults(alias));
 
-    if (lang !== alias && typeof aliasOpts === 'object') {
+    if (lang !== alias && typeof aliasOpts === "object") {
       Object.assign(opts, aliasOpts);
     }
 
@@ -97,18 +97,18 @@ export function sveltePreprocess(
   function getTransformerOptions(
     lang?: string | null,
     alias?: string | null,
-    { ignoreAliasOverride }: { ignoreAliasOverride?: boolean } = {},
+    { ignoreAliasOverride }: { ignoreAliasOverride?: boolean } = {}
   ): TransformerOptions<unknown> {
     if (lang == null) return null;
 
     const langOpts = transformers[lang];
     const aliasOpts = alias ? transformers[alias] : undefined;
 
-    if (!ignoreAliasOverride && typeof aliasOpts === 'function') {
+    if (!ignoreAliasOverride && typeof aliasOpts === "function") {
       return aliasOpts;
     }
 
-    if (typeof langOpts === 'function') return langOpts;
+    if (typeof langOpts === "function") return langOpts;
     if (aliasOpts === false || langOpts === false) return false;
 
     return resolveLanguageArgs(lang, alias);
@@ -116,8 +116,8 @@ export function sveltePreprocess(
 
   const getTransformerTo =
     (
-      type: 'markup' | 'script' | 'style',
-      targetLanguage: string,
+      type: "markup" | "script" | "style",
+      targetLanguage: string
     ): Preprocessor =>
     async (svelteFile) => {
       let { content, markup, filename, lang, alias, dependencies, attributes } =
@@ -142,7 +142,7 @@ export function sveltePreprocess(
       if (lang === targetLanguage) {
         // has override method for alias
         // example: sugarss override should work apart from postcss
-        if (typeof transformerOptions === 'function' && alias !== lang) {
+        if (typeof transformerOptions === "function" && alias !== lang) {
           return transformerOptions({ content, filename, attributes });
         }
 
@@ -163,13 +163,13 @@ export function sveltePreprocess(
       };
     };
 
-  const scriptTransformer = getTransformerTo('script', 'javascript');
-  const cssTransformer = getTransformerTo('style', 'css');
-  const markupTransformer = getTransformerTo('markup', 'html');
+  const scriptTransformer = getTransformerTo("script", "javascript");
+  const cssTransformer = getTransformerTo("style", "css");
+  const markupTransformer = getTransformerTo("markup", "html");
 
-  const markup: PreprocessorGroup['markup'] = async ({ content, filename }) => {
+  const markup: PreprocessorGroup["markup"] = async ({ content, filename }) => {
     if (transformers.replace) {
-      const transformed = await transform('replace', transformers.replace, {
+      const transformed = await transform("replace", transformers.replace, {
         content,
         markup: content,
         filename,
@@ -185,7 +185,7 @@ export function sveltePreprocess(
     });
   };
 
-  const script: PreprocessorGroup['script'] = async ({
+  const script: PreprocessorGroup["script"] = async ({
     content,
     attributes,
     markup: fullMarkup,
@@ -202,9 +202,9 @@ export function sveltePreprocess(
 
     if (transformers.babel) {
       const transformed = await transform(
-        'babel',
-        getTransformerOptions('babel'),
-        { content: code, markup: fullMarkup, map, filename, attributes },
+        "babel",
+        getTransformerOptions("babel"),
+        { content: code, markup: fullMarkup, map, filename, attributes }
       );
 
       code = transformed.code;
@@ -216,7 +216,7 @@ export function sveltePreprocess(
     return { code, map, dependencies, diagnostics };
   };
 
-  const style: PreprocessorGroup['style'] = async ({
+  const style: PreprocessorGroup["style"] = async ({
     content,
     attributes,
     markup: fullMarkup,
@@ -231,20 +231,20 @@ export function sveltePreprocess(
 
     let { code, map, dependencies } = transformResult;
 
-    const hasPostcss = await hasDepInstalled('postcss');
+    const hasPostcss = await hasDepInstalled("postcss");
 
     // istanbul ignore else
     if (hasPostcss) {
       if (transformers.postcss) {
         const { alias, lang } = getLanguage(attributes);
         const postcssOptions = getTransformerOptions(
-          'postcss',
+          "postcss",
           isAliasOf(alias, lang) ? alias : null,
           // todo: this seems wrong and ugly
-          { ignoreAliasOverride: true },
+          { ignoreAliasOverride: true }
         );
 
-        const transformed = await transform('postcss', postcssOptions, {
+        const transformed = await transform("postcss", postcssOptions, {
           content: code,
           markup: fullMarkup,
           map,
@@ -258,16 +258,16 @@ export function sveltePreprocess(
       }
 
       const transformed = await transform(
-        'globalStyle',
-        getTransformerOptions('globalStyle'),
-        { content: code, markup: fullMarkup, map, filename, attributes },
+        "globalStyle",
+        getTransformerOptions("globalStyle"),
+        { content: code, markup: fullMarkup, map, filename, attributes }
       );
 
       code = transformed.code;
       map = transformed.map;
-    } else if ('global' in attributes) {
+    } else if ("global" in attributes) {
       console.warn(
-        `[svelte-preprocess] 'global' attribute found, but 'postcss' is not installed. 'postcss' is used to walk through the CSS and transform any necessary selector.`,
+        `[svelte-purs] 'global' attribute found, but 'postcss' is not installed. 'postcss' is used to walk through the CSS and transform any necessary selector.`
       );
     }
 
