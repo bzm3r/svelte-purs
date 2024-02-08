@@ -1,1 +1,4 @@
-"@kiwi/prettier-config"
+{
+  "tabWidth": 2,
+  "useTabs": false
+}
